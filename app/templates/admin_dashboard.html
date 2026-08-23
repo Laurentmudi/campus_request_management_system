@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+
+<div class="page-header">
+    <h2><i class="fa-solid fa-list-check"></i> All Requests</h2>
+    <a class="btn" href="{{ url_for('main.export_requests') }}"><i class="fa-solid fa-download"></i> Export CSV</a>
+</div>
+
+
+{% if requests %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Requested By</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Status / Assign</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in requests %}
+        <tr>
+            <td>#{{ r.id }}</td>
+            <td><i class="fa-solid fa-user"></i> {{ r.requester.full_name }}<br><small>{{ r.requester.role }}</small></td>
+            <td>{{ r.category }}</td>
+            <td>{{ r.description }}</td>
+            <td>{{ r.location or '-' }}</td>
+            <td>{{ r.date_created.strftime('%d %b %Y, %H:%M') }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('main.update_request', req_id=r.id) }}" class="inline-form">
+                    <select name="status">
+                        {% for s in statuses %}
+                        <option value="{{ s }}" {% if r.status == s %}selected{% endif %}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="text" name="assigned_to" value="{{ r.assigned_to or '' }}" placeholder="Assign to...">
+                    <button type="submit"><i class="fa-solid fa-check"></i> Update</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state"><i class="fa-solid fa-inbox"></i> No requests have been submitted yet.</p>
+{% endif %}
+{% endblock %}

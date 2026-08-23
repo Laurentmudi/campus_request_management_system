@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}New Request{% endblock %}
+{% block content %}
+<div class="form-card">
+    <h2>Submit a New Request</h2>
+    <form method="POST" action="{{ url_for('main.new_request') }}">
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+            {% for c in categories %}
+            <option value="{{ c }}">{{ c }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" placeholder="e.g. Block C, Room 12">
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="5" required placeholder="Describe the issue or request in detail"></textarea>
+
+        <button type="submit">Submit Request</button>
+    </form>
+</div>
+{% endblock %}

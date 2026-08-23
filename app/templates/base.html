@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}CRMS{% endblock %} - KeMU Campus Request Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{{ url_for('main.index') }}" class="nav-brand"><i class="fa-solid fa-building-columns"></i> KeMU CRMS</a>
+        <div class="nav-links">
+            {% if current_user.is_authenticated %}
+                {% if current_user.role == 'admin' %}
+                    <a href="{{ url_for('main.admin_dashboard') }}"><i class="fa-solid fa-gauge"></i> Admin Dashboard</a>
+                {% else %}
+                    <a href="{{ url_for('main.dashboard') }}"><i class="fa-solid fa-list-check"></i> My Requests</a>
+                    <a href="{{ url_for('main.new_request') }}"><i class="fa-solid fa-plus"></i> New Request</a>
+                {% endif %}
+                <span class="nav-user"><i class="fa-solid fa-user"></i> {{ current_user.full_name }} ({{ current_user.role }})</span>
+                <a href="{{ url_for('main.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            {% else %}
+                <a href="{{ url_for('main.index') }}"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="{{ url_for('main.login') }}"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                <a href="{{ url_for('main.register') }}"><i class="fa-solid fa-user-plus"></i> Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

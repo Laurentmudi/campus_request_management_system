@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="hero">
+    <h1>Campus Request Management System</h1>
+    <p>Kenya Methodist University — Department of Information Technology</p>
+    <p class="hero-sub">
+        Submit and track requests for venues, transport, and maintenance
+        online, and let administrators assign and resolve them faster.
+    </p>
+    <div class="hero-actions">
+        <a class="btnc" href="{{ url_for('main.login') }}">Login</a>
+        <a class="btnc" href="{{ url_for('main.register') }}">Create an Account</a>
+    </div>
+</div>
+
+<div class="feature-grid">
+    <div class="feature-card">
+        <h3>Submit Requests</h3>
+        <p>Students and staff log a request in under a minute — pick a category, add a location and description.</p>
+    </div>
+    <div class="feature-card">
+        <h3>Track Status</h3>
+        <p>Every request moves through Pending, Assigned, In Progress, and Resolved, so nothing gets lost.</p>
+    </div>
+    <div class="feature-card">
+        <h3>Admin Oversight</h3>
+        <p>Administrators see every request in one place and assign it to the right person immediately.</p>
+    </div>
+</div>
+{% endblock %}

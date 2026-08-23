@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}My Requests{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>My Requests</h2>
+    <a class="btn" href="{{ url_for('main.new_request') }}"><i class="fa-solid fa-plus"></i> New Request</a>
+</div>
+
+{% if requests %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Assigned To</th>
+            <th>Date Submitted</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in requests %}
+        <tr>
+            <td>#{{ r.id }}</td>
+            <td>{{ r.category }}</td>
+            <td>{{ r.description }}</td>
+            <td>{{ r.location or '-' }}</td>
+            <td>
+                <span class="status status-{{ r.status | replace(' ', '') }}">
+                    {% if r.status == 'Pending' %}<i class="fa-solid fa-clock"></i>
+                    {% elif r.status == 'Assigned' %}<i class="fa-solid fa-user-check"></i>
+                    {% elif r.status == 'In Progress' %}<i class="fa-solid fa-gears"></i>
+                    {% else %}<i class="fa-solid fa-circle-check"></i>{% endif %}
+                    {{ r.status }}
+                </span>
+            </td>
+            <td>{{ r.assigned_to or '-' }}</td>
+            <td>{{ r.date_created.strftime('%d %b %Y, %H:%M') }}</td>
+            <td>
+                {% if r.status == 'Pending' %}
+                <form method="POST" action="{{ url_for('main.delete_request', req_id=r.id) }}"
+                      onsubmit="return confirm('Delete this request? This cannot be undone.');">
+                    <button type="submit" class="btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+                </form>
+                {% else %}
+                <span class="muted">-</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">You have not submitted any requests yet.</p>
+{% endif %}
+{% endblock %}
